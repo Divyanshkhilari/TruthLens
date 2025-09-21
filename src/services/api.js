@@ -1,7 +1,8 @@
 import axios from 'axios'
+import { API_CONFIG } from '../config/api'
 
 // Configure your backend API endpoint here
-const API_BASE_URL = 'http://127.0.0.1:8001' // Your Python Flask backend URL
+const API_BASE_URL = import.meta.env.VITE_API_URL || API_CONFIG.API_BASE_URL
 
 const api = axios.create({
   baseURL: API_BASE_URL,
@@ -12,6 +13,20 @@ const api = axios.create({
 })
 
 export const checkFact = async (data) => {
+  // Check if we're in demo mode (no backend available)
+  const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || API_BASE_URL.includes('your-backend-url')
+  
+  if (isDemoMode) {
+    // Use mock API for demo
+    const { mockAnalyzeText, mockAnalyzeImage } = await import('./mockApi')
+    
+    if (data.type === 'text') {
+      return await mockAnalyzeText(data.content)
+    } else {
+      return await mockAnalyzeImage()
+    }
+  }
+  
   try {
     let response
     
@@ -47,7 +62,7 @@ export const checkFact = async (data) => {
       return {
         isTrue: false,
         confidence: 0,
-        explanation: "Unable to connect to the TruthLens backend server. Please make sure the Python Flask server is running on http://127.0.0.1:8001. Check the backend README for setup instructions.",
+        explanation: "Unable to connect to the TruthLens backend server. This demo is running in frontend-only mode. For full functionality, deploy the Python Flask backend and update the API configuration.",
         sources: []
       }
     }
