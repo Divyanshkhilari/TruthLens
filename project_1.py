@@ -6,7 +6,7 @@ from io import BytesIO
 import os
 
 # Configure the Gemini API with your key from the environment variable
-genai.configure(api_key=os.getenv('GOOGLE_API_KEY', 'AIzaSyAwjjxvTlkPT2tvJ3ZQoQHjbrSULjL0swk'))
+genai.configure(api_key=os.getenv('GOOGLE_API_KEY'))
 
 def analyze_text_for_misinformation(text: str):
     """Analyzes a given text for misinformation and provides a detailed breakdown.

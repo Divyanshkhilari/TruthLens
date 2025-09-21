@@ -12,7 +12,14 @@ def main():
     
     # Set development environment
     os.environ['FLASK_ENV'] = 'development'
-    os.environ['GOOGLE_API_KEY'] = 'AIzaSyAwjjxvTlkPT2tvJ3ZQoQHjbrSULjL0swk'
+    
+    # Check if API key is already set
+    if not os.getenv('GOOGLE_API_KEY'):
+        print("❌ GOOGLE_API_KEY not found!")
+        print("Please set your Google AI API key:")
+        print("  export GOOGLE_API_KEY='your-api-key-here'")
+        print("  or on Windows: set GOOGLE_API_KEY=your-api-key-here")
+        sys.exit(1)
     
     print("✅ Development mode enabled")
     print("🌐 Server will start on http://localhost:8001")

@@ -32,13 +32,16 @@ cd TruthLens
 # Install Python dependencies
 pip install -r backend/requirements.txt
 
-# Set your Google AI API key
-export GOOGLE_API_KEY="your-api-key-here"
-# On Windows: set GOOGLE_API_KEY=your-api-key-here
+# 🔑 IMPORTANT: Set your Google AI API key
+# Get your key from: https://makersuite.google.com/app/apikey
+export GOOGLE_API_KEY="your-actual-api-key-here"
+# On Windows: set GOOGLE_API_KEY=your-actual-api-key-here
 
 # Start the development server
 python start-dev.py
 ```
+
+> ⚠️ **Security Note**: Never commit your API key to version control! The application will not start without a valid API key.
 
 ### 3. Setup Frontend
 ```bash
