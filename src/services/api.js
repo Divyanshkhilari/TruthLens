@@ -13,60 +13,51 @@ const api = axios.create({
 })
 
 export const checkFact = async (data) => {
-  // Always use demo mode in production unless a real backend URL is provided
-  const isProduction = import.meta.env.PROD
-  const hasRealBackend = import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('your-backend-url')
-  const isDemoMode = isProduction && !hasRealBackend
+  console.log('🚀 TruthLens API called with:', data.type)
   
-  console.log('Environment check:', { 
-    isProduction, 
-    hasRealBackend, 
-    isDemoMode, 
-    API_BASE_URL,
-    VITE_API_URL: import.meta.env.VITE_API_URL 
-  })
+  // ALWAYS use demo mode for now - this ensures it works everywhere
+  console.log('✅ Using demo mode - guaranteed to work!')
   
-  // For now, always use demo mode to ensure it works
-  const forceDemo = true
-  
-  if (isDemoMode || forceDemo) {
-    console.log('Using mock API for demo')
-    try {
-      // Use mock API for demo
-      const { mockAnalyzeText, mockAnalyzeImage } = await import('./mockApi')
-      
-      if (data.type === 'text') {
-        return await mockAnalyzeText(data.content)
-      } else {
-        return await mockAnalyzeImage()
-      }
-    } catch (importError) {
-      console.error('Failed to import mock API:', importError)
-      // Fallback response
-      return {
-        isTrue: false,
-        confidence: 75,
-        explanation: `This ${data.type} is **60% likely to be accurate**, **25% likely to contain misinformation**, and **15% likely to be misleading**.
+  try {
+    // Use mock API for demo
+    const { mockAnalyzeText, mockAnalyzeImage } = await import('./mockApi')
+    
+    if (data.type === 'text') {
+      console.log('📝 Analyzing text with mock API')
+      return await mockAnalyzeText(data.content)
+    } else {
+      console.log('🖼️ Analyzing image with mock API')
+      return await mockAnalyzeImage()
+    }
+  } catch (importError) {
+    console.error('❌ Failed to import mock API:', importError)
+    // Ultimate fallback response
+    return {
+      isTrue: false,
+      confidence: 75,
+      explanation: `This ${data.type} is **60% likely to be accurate**, **25% likely to contain misinformation**, and **15% likely to be misleading**.
 
-**Demo Mode Active**: This is a demonstration of TruthLens AI fact-checking capabilities. In production, this would connect to our Gemini AI backend for real analysis.
+**✨ Demo Mode Active**: This is a demonstration of TruthLens AI fact-checking capabilities. In production, this would connect to our Gemini AI backend for real analysis.
 
-**Key Features Demonstrated**:
+**🎯 Key Features Demonstrated**:
 - AI-powered content analysis
 - Probability-based authenticity scoring  
 - Visual charts and detailed breakdowns
 - Professional UI with smooth animations
 
-**For Full Functionality**: Deploy the Python Flask backend with your Google AI API key.`,
-        sources: [
-          {
-            title: "TruthLens Demo",
-            url: "https://github.com/Divyanshkhilari/TruthLens",
-            domain: "github.com"
-          }
-        ]
-      }
+**🚀 For Full Functionality**: Deploy the Python Flask backend with your Google AI API key.`,
+      sources: [
+        {
+          title: "TruthLens Demo",
+          url: "https://github.com/Divyanshkhilari/TruthLens",
+          domain: "github.com"
+        }
+      ]
     }
   }
+
+  // This code should never be reached in demo mode
+  console.log('⚠️ Demo mode failed, this should not happen')
   
   try {
     let response

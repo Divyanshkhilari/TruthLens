@@ -1,5 +1,7 @@
 // Mock API for demo purposes when backend is not available
 export const mockAnalyzeText = async (text) => {
+  console.log('🎭 Mock API: Analyzing text:', text?.substring(0, 50) + '...')
+  
   // Simulate API delay
   await new Promise(resolve => setTimeout(resolve, 2000))
   
@@ -51,13 +53,17 @@ export const mockAnalyzeText = async (text) => {
     }
   ]
   
-  return mockResponses[Math.floor(Math.random() * mockResponses.length)]
+  const result = mockResponses[Math.floor(Math.random() * mockResponses.length)]
+  console.log('✅ Mock API: Returning result with confidence:', result.confidence)
+  return result
 }
 
 export const mockAnalyzeImage = async () => {
+  console.log('🎭 Mock API: Analyzing image')
+  
   await new Promise(resolve => setTimeout(resolve, 3000))
   
-  return {
+  const result = {
     isTrue: false,
     confidence: 82,
     explanation: `This image is **20% likely to be genuine**, **65% likely to be manipulated**, and **15% likely to be used in a misleading context**.
@@ -79,4 +85,7 @@ export const mockAnalyzeImage = async () => {
       }
     ]
   }
+  
+  console.log('✅ Mock API: Returning image result with confidence:', result.confidence)
+  return result
 }
