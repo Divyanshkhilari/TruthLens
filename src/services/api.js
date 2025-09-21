@@ -31,13 +31,40 @@ export const checkFact = async (data) => {
   
   if (isDemoMode || forceDemo) {
     console.log('Using mock API for demo')
-    // Use mock API for demo
-    const { mockAnalyzeText, mockAnalyzeImage } = await import('./mockApi')
-    
-    if (data.type === 'text') {
-      return await mockAnalyzeText(data.content)
-    } else {
-      return await mockAnalyzeImage()
+    try {
+      // Use mock API for demo
+      const { mockAnalyzeText, mockAnalyzeImage } = await import('./mockApi')
+      
+      if (data.type === 'text') {
+        return await mockAnalyzeText(data.content)
+      } else {
+        return await mockAnalyzeImage()
+      }
+    } catch (importError) {
+      console.error('Failed to import mock API:', importError)
+      // Fallback response
+      return {
+        isTrue: false,
+        confidence: 75,
+        explanation: `This ${data.type} is **60% likely to be accurate**, **25% likely to contain misinformation**, and **15% likely to be misleading**.
+
+**Demo Mode Active**: This is a demonstration of TruthLens AI fact-checking capabilities. In production, this would connect to our Gemini AI backend for real analysis.
+
+**Key Features Demonstrated**:
+- AI-powered content analysis
+- Probability-based authenticity scoring  
+- Visual charts and detailed breakdowns
+- Professional UI with smooth animations
+
+**For Full Functionality**: Deploy the Python Flask backend with your Google AI API key.`,
+        sources: [
+          {
+            title: "TruthLens Demo",
+            url: "https://github.com/Divyanshkhilari/TruthLens",
+            domain: "github.com"
+          }
+        ]
+      }
     }
   }
   
