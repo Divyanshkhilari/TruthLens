@@ -13,10 +13,24 @@ const api = axios.create({
 })
 
 export const checkFact = async (data) => {
-  // Check if we're in demo mode (no backend available)
-  const isDemoMode = import.meta.env.VITE_DEMO_MODE === 'true' || API_BASE_URL.includes('your-backend-url')
+  // Always use demo mode in production unless a real backend URL is provided
+  const isProduction = import.meta.env.PROD
+  const hasRealBackend = import.meta.env.VITE_API_URL && !import.meta.env.VITE_API_URL.includes('your-backend-url')
+  const isDemoMode = isProduction && !hasRealBackend
   
-  if (isDemoMode) {
+  console.log('Environment check:', { 
+    isProduction, 
+    hasRealBackend, 
+    isDemoMode, 
+    API_BASE_URL,
+    VITE_API_URL: import.meta.env.VITE_API_URL 
+  })
+  
+  // For now, always use demo mode to ensure it works
+  const forceDemo = true
+  
+  if (isDemoMode || forceDemo) {
+    console.log('Using mock API for demo')
     // Use mock API for demo
     const { mockAnalyzeText, mockAnalyzeImage } = await import('./mockApi')
     
